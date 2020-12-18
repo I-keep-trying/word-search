@@ -9,7 +9,6 @@
 /coverage
 
 # production
-/build
 
 # misc
 .DS_Store
@@ -23,4 +22,5 @@ yarn-debug.log*
 yarn-error.log*
 audit.txt
 
-/src/App1.js
+/src/stringDiff.old.js
+.eslintcache

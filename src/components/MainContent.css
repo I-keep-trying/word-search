@@ -1,0 +1,34 @@
+.ui.fluid.container.content-container {
+  display: flex;
+  min-height: 50vh;
+  width: 100%;
+}
+.ui.fluid.container.content-container .ui.segment.main-content {
+  width: 80%;
+  margin: 0;
+  padding: 30px;
+  border: none;
+  padding-bottom: 20vh;
+  margin-top: 10vh;
+}
+.ui.fluid.container.content-container
+  .ui.segment.main-content
+  .ui.divided.very.relaxed.list
+  .item
+  .btn-group-action
+  .ui.button {
+  background: none;
+}
+.ui.fluid.container.content-container .ui.segment.side-bar {
+  width: 20%;
+  padding: 0;
+  margin: 0;
+}
+
+.myButton {
+  display: none;
+}
+
+.item:hover button {
+  display: inline-block;
+}

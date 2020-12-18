@@ -1,5 +1,4 @@
-export const stringDiff = (a, b, e) => {
-  console.log('a, b', a, ',', b, 'e', e)
+export const stringDiff = (a, b) => {
   let i = 0,
     j = 0,
     len1 = a.length,
@@ -8,7 +7,6 @@ export const stringDiff = (a, b, e) => {
     end2 = false,
     match = false,
     error = ''
-
   const results = []
 
   while (true) {
@@ -29,18 +27,15 @@ export const stringDiff = (a, b, e) => {
     }
 
     if (a[i] !== b[j] && !end1 && !end2) {
+      console.log('a', a, 'b', b)
+
       const strMatch1 = [...a.matchAll(a[i])]
       const strMatch2 = [...b.matchAll(b[j])]
-      if (
-        strMatch1.length !== strMatch2.length ||
-        e.includes(strMatch2[0][0])
-      ) {
-        // this seems to work even though it's just counting the number of matches
-        console.log('strMatch2', strMatch2[0][0])
-
+      if (strMatch1.length !== strMatch2.length) {
         end1 = true
         end2 = true
         match = false
+        break
       } else {
         end1 = i + 1 === len1
         end2 = j + 1 === len2
@@ -53,9 +48,8 @@ export const stringDiff = (a, b, e) => {
   }
 
   if (match === true) {
-    results.push(b)
+    results.push({ word: b })
   }
-
   return { match, results, error }
 }
 

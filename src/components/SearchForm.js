@@ -47,77 +47,29 @@ const SearchForm = () => {
     const regx = new RegExp(`${exArr}`)
     const regx2 = /\*/g
     const arr1Match = [...arr1.matchAll(regx2)]
-    console.log('arr1Match', arr1Match)
-    /*     const newArr = arr2.filter(({ word }) => {
-      console.log('word', word)
-      return !word.match(regx)
-    })
-    console.log('newArr', newArr) */
-    //'ba*ll*'
     const newArr2 = arr2.filter(({ word }) => {
-      console.log('---word---', word)
       if (word.length < arr1.length) {
         return null
       }
-      /*       console.log('arr1Match[0].index', arr1Match[0].index) //2
-      console.log('arr1Match[1].index', arr1Match[1].index) //5
-      console.log('word.length', word.length) //bagatelle 9
- */
       const input1 = arr1.slice(0, arr1Match[0].index)
       const input2 = arr1.slice(arr1Match[0].index + 1, arr1Match[1].index)
       const input3 = arr1.slice(arr1Match[1].index + 1)
-      console.log('input1', input1, 'input2', input2, 'input3', input3)
       const regex1 = new RegExp(`^${input1}`)
       const regex2 = new RegExp(`${input2}`)
-      const regex3 = new RegExp(`${input3}$`)
       const word1 = word.match(regex1)
       const word2 = word.match(regex2)
-      const word3 = word.match(regex3)
-      console.log('word1', word1, 'word2', word2, 'word3', word3)
-      const diff = arr1Match[0].index - arr1.length + 1
-      const diff2 = arr1Match[1].index - arr1.length + 1
-      const diffBetween = arr1Match[1].index - arr1Match[0].index
-
-      const wordSub = word.slice(arr1Match[0].index)
-      const wordSubDiff = wordSub.slice(diff)
-      const wordSubDiff2 = wordSub.slice(diff2)
-      const wordSub00 = word.slice(arr1Match[1].index - 1)
-      const wordSub1 = word.slice(0, arr1Match[0].index)
-      const wordSub01 = word.slice(arr1Match[0].index + diffBetween)
-      const wordSub3 = word.slice(arr1Match[0].index, diff)
-      const wordSub03 = word.slice(arr1Match[1].index, diff2)
-      const wordSub4 = word.slice(word.length - arr1Match[0].index + 1)
-      const wordSub04 = word.slice(word.length - arr1Match[1].index - 1)
-
-      /*       console.log('diff', diff, 'diff2', diff2, 'diffBetween', diffBetween)
-      console.log('wordSub', wordSub)
-      console.log(
-        'wordSubDiff',
-        wordSubDiff, // ic from ballistic
-        'wordSubDiff2',
-        wordSubDiff2
+      const wordSub = word.slice(word1[0].length, word2.index)
+      const wordSub2 = word.slice(
+        input1.length + wordSub.length + input2.length,
+        word.length - input3.length
       )
-      console.log('wordSub00', wordSub00) // istic from ballistic, oon from balloon, cally from basically
-      console.log('wordSub1', wordSub1) // ba from ba*ll*
-      console.log('wordSub01', wordSub01)
-      console.log('wordSub3', wordSub3) // gate from bagatelle, sica from basically
-      console.log('wordSub03', wordSub03)
-      console.log('wordSub4', wordSub4)// y from basically, e from bagatelle
-      console.log('wordSub04', wordSub04)
- */
-      /*         const wordSub1 = word.slice(0, arr1Match[n].index)
-        const wordSub2 = wordSub.slice(diff)
-        const wordSub3 = word.slice(arr1Match[0].index, diff)
-        if (diff === 0) {
-          console.log('diff === 0 word')
-          word = wordSub2
-          console.log('word', word)
-          return !word.match(regx)
-        } else if (!wordSub3.match(regx)) {
-          return word
-        } else {
-          return null
-        } */
+      const wordMatch = wordSub.match(regx)
+      const wordMatch2 = wordSub2.match(regx)
+      if (!wordMatch && !wordMatch2) {
+        return word
+      } else {
+        return null
+      }
     })
 
     return newArr2
@@ -322,7 +274,6 @@ const SearchForm = () => {
           <Button color="teal" size="large" onClick={handleClick}>
             Search
           </Button>
-          {JSON.stringify(results)}
           {results.length > 0 ? (
             <CopyToClipboard
               className="CopyToClipboard"

@@ -17,80 +17,208 @@ import { toast } from 'react-toastify'
 import { getWords } from '../services/dictionary'
 import './MainContent.css'
 
+const wordArr = [
+  { word: 'backslide', score: 10903 },
+  { word: 'back', score: 9939 },
+  { word: 'bar', score: 6002 },
+  { word: 'ball', score: 5079 },
+  { word: 'bag', score: 4513 },
+  { word: 'bank', score: 4396 },
+  { word: 'base', score: 4347 },
+  { word: 'bay', score: 3721 },
+  { word: 'balance', score: 3312 },
+  { word: 'band', score: 3090 },
+  { word: 'bat', score: 2642 },
+  { word: 'badger', score: 2606 },
+  { word: 'banal', score: 2339 },
+  { word: 'baby', score: 2307 },
+  { word: 'bad', score: 2264 },
+]
 const SearchForm = () => {
   const [results, setResults] = useState([])
-  const [userInput, setUserInput] = useState('') //ba1122n
-  const [exclusions, setExclusions] = useState('')
+  const [userInput, setUserInput] = useState('ba*ll*s') //ba1122n
+  const [exclusions, setExclusions] = useState('s')
   const [copied, setCopied] = useState(false)
   const [message, setMessage] = useState('')
 
-  const filterExclusions = (arr1, arr2) => {
-    let wildcards1 = userInput.match(/\*|\?/g)
-    let wildcards2 = userInput.match(/\d/g)
+  const handleExclusions = (arr1, arr2) => {
+    console.log('-----------------------------------------------')
     const exArr = exclusions.split('').join('|')
     const regx = new RegExp(`${exArr}`)
-    const newArr = arr2.filter(({ word }) => !word.match(regx))
+    const regx2 = /\*/g
+    const arr1Match = [...arr1.matchAll(regx2)]
+    console.log('arr1Match', arr1Match)
+    /*     const newArr = arr2.filter(({ word }) => {
+      console.log('word', word)
+      return !word.match(regx)
+    })
+    console.log('newArr', newArr) */
+    //'ba*ll*'
+    const newArr2 = arr2.filter(({ word }) => {
+      console.log('---word---', word)
+      if (word.length < arr1.length) {
+        return null
+      }
+      /*       console.log('arr1Match[0].index', arr1Match[0].index) //2
+      console.log('arr1Match[1].index', arr1Match[1].index) //5
+      console.log('word.length', word.length) //bagatelle 9
+ */
+      const input1 = arr1.slice(0, arr1Match[0].index)
+      const input2 = arr1.slice(arr1Match[0].index + 1, arr1Match[1].index)
+      const input3 = arr1.slice(arr1Match[1].index + 1)
+      console.log('input1', input1, 'input2', input2, 'input3', input3)
+      const regex1 = new RegExp(`^${input1}`)
+      const regex2 = new RegExp(`${input2}`)
+      const regex3 = new RegExp(`${input3}$`)
+      const word1 = word.match(regex1)
+      const word2 = word.match(regex2)
+      const word3 = word.match(regex3)
+      console.log('word1', word1, 'word2', word2, 'word3', word3)
+      const diff = arr1Match[0].index - arr1.length + 1
+      const diff2 = arr1Match[1].index - arr1.length + 1
+      const diffBetween = arr1Match[1].index - arr1Match[0].index
 
-    if (wildcards1 !== null && wildcards2 === null) {
-      setResults((state) => [...state, ...newArr])
-    } else if (wildcards2 !== null && wildcards1 === null) {
-      filterStrings(arr1, newArr)
-    }
+      const wordSub = word.slice(arr1Match[0].index)
+      const wordSubDiff = wordSub.slice(diff)
+      const wordSubDiff2 = wordSub.slice(diff2)
+      const wordSub00 = word.slice(arr1Match[1].index - 1)
+      const wordSub1 = word.slice(0, arr1Match[0].index)
+      const wordSub01 = word.slice(arr1Match[0].index + diffBetween)
+      const wordSub3 = word.slice(arr1Match[0].index, diff)
+      const wordSub03 = word.slice(arr1Match[1].index, diff2)
+      const wordSub4 = word.slice(word.length - arr1Match[0].index + 1)
+      const wordSub04 = word.slice(word.length - arr1Match[1].index - 1)
+
+      /*       console.log('diff', diff, 'diff2', diff2, 'diffBetween', diffBetween)
+      console.log('wordSub', wordSub)
+      console.log(
+        'wordSubDiff',
+        wordSubDiff, // ic from ballistic
+        'wordSubDiff2',
+        wordSubDiff2
+      )
+      console.log('wordSub00', wordSub00) // istic from ballistic, oon from balloon, cally from basically
+      console.log('wordSub1', wordSub1) // ba from ba*ll*
+      console.log('wordSub01', wordSub01)
+      console.log('wordSub3', wordSub3) // gate from bagatelle, sica from basically
+      console.log('wordSub03', wordSub03)
+      console.log('wordSub4', wordSub4)// y from basically, e from bagatelle
+      console.log('wordSub04', wordSub04)
+ */
+      /*         const wordSub1 = word.slice(0, arr1Match[n].index)
+        const wordSub2 = wordSub.slice(diff)
+        const wordSub3 = word.slice(arr1Match[0].index, diff)
+        if (diff === 0) {
+          console.log('diff === 0 word')
+          word = wordSub2
+          console.log('word', word)
+          return !word.match(regx)
+        } else if (!wordSub3.match(regx)) {
+          return word
+        } else {
+          return null
+        } */
+    })
+
+    return newArr2
   }
 
-  const filterStrings = (arr1, arr2) => {
-    console.log('arr1', arr1, 'arr2', arr2)
+  const filterStrings = (arr1, arr2, reg) => {
     let newStringArr = arr2?.reduce((acc, item) => {
-      if (item.word.length === userInput.length) {
-        acc.push(item)
-      }
+      acc.push(item)
       return acc
     }, [])
-    newStringArr.forEach((obj) => {
-      const newArr = stringDiff(arr1, obj.word)
-      if (newArr.error) {
-        toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-      } else if (newArr.results.length > 0) {
-        setResults((state) => [...state, ...newArr.results])
+    if (reg === null) {
+      if (exclusions) {
+        setResults((state) => [...state, ...handleExclusions(arr1, arr2)])
       } else {
-        console.log('else... results', results)
+        setResults((state) => [...state, ...arr2])
       }
-    })
+    } else if (reg.wildcards !== undefined && reg.numeric === undefined) {
+      if (exclusions) {
+        setResults((state) => [...state, ...handleExclusions(arr1, arr2)])
+      } else {
+        setResults((state) => [...state, ...arr2])
+      }
+    } else if (reg.wildcards === undefined && reg.numeric !== undefined) {
+      if (exclusions) {
+        const exclArr = handleExclusions(arr1, arr2)
+        exclArr.forEach((obj) => {
+          const newArr = stringDiff(arr1, obj.word)
+          if (newArr.error) {
+            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
+          } else {
+            setResults((state) => [...state, ...newArr.results])
+          }
+        })
+      } else {
+        arr2.forEach((obj) => {
+          const newArr = stringDiff(arr1, obj.word)
+          if (newArr.error) {
+            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
+          } else {
+            setResults((state) => [...state, ...newArr.results])
+          }
+        })
+      }
+    } else if (reg.wildcards[0] === '*' && reg.numeric !== undefined) {
+      if (exclusions) {
+        const exclArr = handleExclusions(arr1, arr2)
+        exclArr.forEach((obj) => {
+          const newArr = stringDiff(arr1, obj.word)
+          /*  const newArr = stringDiff(arr1, obj.word)
+          if (newArr.error) {
+            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
+          } else {
+            setResults((state) => [...state, ...newArr.results])
+          } */
+        })
+      } else {
+        newStringArr.forEach((obj) => {
+          const newArr = stringDiff(arr1, obj.word)
+          /* const newArr = stringDiff(arr1, obj.word)
+          if (newArr.error) {
+            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
+          } else {
+            setResults((state) => [...state, ...newArr.results])
+          } */
+        })
+      }
+    } else {
+      console.log('who lands here?')
+    }
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     setResults([])
-    let wildcards1 = userInput.match(/\*|\?/g)
-    let alpha = userInput.match(/[\d\\?\\*]/g)
-    let numeric = userInput.match(/\d/g)
-    console.log('alpha', alpha, 'numeric', numeric)
-    let r
-    if (userInput.length > 10) {
+    const wildcards = userInput.match(/\*|\?/g)
+    const numeric = [...userInput.matchAll(/\d/g)]
+    const regx = /\d/g
+    let r = []
+    let newUserInput
+    if (userInput.length > 30) {
       toast(
         'Word search is limited to 30 characters or less. Please adjust search accordingly.'
       )
     } else if (exclusions.length > 25) {
       toast('Exclusions are limited to 25 characters or less.')
     } else {
-      r = await getWords(userInput)
-      if (!exclusions) {
-        if (wildcards1 !== null || alpha === null) {
-          console.log('userInput ? or *', userInput)
-
-          console.log('wildcards1', wildcards1)
-          setResults((state) => [...state, ...r])
-        } else if (numeric !== null) {
-          const regx = /\d/g
-          const newUserInput = userInput.replace(regx, '?')
-          console.log('newUserInput numeric', newUserInput)
-          const s = await getWords(newUserInput)
-          filterStrings(userInput, s)
-        } else {
-          console.log('userInput not numeric', userInput)
-        }
+      if (numeric.length === 0 && wildcards?.length > 0) {
+        r = await getWords(userInput)
+        filterStrings(userInput, r, { wildcards })
+      } else if (numeric.length > 0 && wildcards?.length === undefined) {
+        newUserInput = userInput.replace(regx, '?')
+        r = await getWords(newUserInput)
+        filterStrings(userInput, r, { numeric })
+      } else if (wildcards?.length > 0 && numeric?.length > 0) {
+        newUserInput = userInput.replace(regx, '?')
+        r = await getWords(newUserInput)
+        filterStrings(newUserInput, r, { wildcards, numeric })
+        return
       } else {
-        filterExclusions(userInput, r)
+        r = await getWords(userInput)
+        filterStrings(userInput, r, wildcards)
       }
     }
   }
@@ -191,10 +319,10 @@ const SearchForm = () => {
             />
           </Form.Field>
 
-          <br />
           <Button color="teal" size="large" onClick={handleClick}>
             Search
           </Button>
+          {JSON.stringify(results)}
           {results.length > 0 ? (
             <CopyToClipboard
               className="CopyToClipboard"

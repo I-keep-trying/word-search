@@ -2,12 +2,10 @@ import React, { useState } from 'react'
 import {
   Button,
   Container,
-  Message,
   Segment,
   Form,
   Input,
   List,
-  Icon,
 } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
@@ -17,160 +15,105 @@ import { toast } from 'react-toastify'
 import { getWords } from '../services/dictionary'
 import './MainContent.css'
 
-const wordArr = [
-  { word: 'backslide', score: 10903 },
-  { word: 'back', score: 9939 },
-  { word: 'bar', score: 6002 },
-  { word: 'ball', score: 5079 },
-  { word: 'bag', score: 4513 },
-  { word: 'bank', score: 4396 },
-  { word: 'base', score: 4347 },
-  { word: 'bay', score: 3721 },
-  { word: 'balance', score: 3312 },
-  { word: 'band', score: 3090 },
-  { word: 'bat', score: 2642 },
-  { word: 'badger', score: 2606 },
-  { word: 'banal', score: 2339 },
-  { word: 'baby', score: 2307 },
-  { word: 'bad', score: 2264 },
-]
 const SearchForm = () => {
   const [results, setResults] = useState([])
-  const [userInput, setUserInput] = useState('ba*ll*s') //ba1122n
-  const [exclusions, setExclusions] = useState('s')
+  const [userInput, setUserInput] = useState('')
+  const [exclusions, setExclusions] = useState('')
+  // eslint-disable-next-line no-unused-vars
   const [copied, setCopied] = useState(false)
-  const [message, setMessage] = useState('')
+  const [toggle, setToggle] = useState(false)
+  const [buttonText, setButtonText] = useState('Sort a-z')
+  console.log('toggle?', toggle)
+  const handleSort = () => {
+    const newResults = [...results]
+    const sort1 = results.sort((a, b) => (a.word < b.word ? 1 : -1))
+    const sort1tog = () => {
+      setToggle(false)
+      setButtonText('Sort a - z')
 
-  const handleExclusions = (arr1, arr2) => {
-    console.log('-----------------------------------------------')
-    const exArr = exclusions.split('').join('|')
-    const regx = new RegExp(`${exArr}`)
-    const regx2 = /\*/g
-    const arr1Match = [...arr1.matchAll(regx2)]
-    const newArr2 = arr2.filter(({ word }) => {
-      if (word.length < arr1.length) {
-        return null
-      }
-      const input1 = arr1.slice(0, arr1Match[0].index)
-      const input2 = arr1.slice(arr1Match[0].index + 1, arr1Match[1].index)
-      const input3 = arr1.slice(arr1Match[1].index + 1)
-      const regex1 = new RegExp(`^${input1}`)
-      const regex2 = new RegExp(`${input2}`)
-      const word1 = word.match(regex1)
-      const word2 = word.match(regex2)
-      const wordSub = word.slice(word1[0].length, word2.index)
-      const wordSub2 = word.slice(
-        input1.length + wordSub.length + input2.length,
-        word.length - input3.length
-      )
-      const wordMatch = wordSub.match(regx)
-      const wordMatch2 = wordSub2.match(regx)
-      if (!wordMatch && !wordMatch2) {
-        return word
-      } else {
-        return null
-      }
-    })
+      setResults(sort1)
+    }
+    const sort2 = newResults.sort((a, b) => (a.word < b.word ? -1 : 1))
 
-    return newArr2
+    const sort2tog = () => {
+      setToggle(true)
+      setButtonText('Sort z - a')
+
+      setResults(sort2)
+    }
+    toggle === false ? sort2tog() : sort1tog()
   }
 
-  const filterStrings = (arr1, arr2, reg) => {
-    let newStringArr = arr2?.reduce((acc, item) => {
-      acc.push(item)
+  const filterExclusions = async (arr, reg) => {
+    const exArr = exclusions.split('').join('|')
+    const regx = new RegExp(`${exArr}`, 'g')
+    const reduceArr = arr.reduce((acc, item) => {
+      for (let i in reg) {
+        let currChar = item.word.charAt(reg[i].index)
+        let matchedItem = [...currChar.matchAll(regx)]
+        if (matchedItem.length > 0) {
+          acc.push(item.word)
+        }
+      }
       return acc
     }, [])
-    if (reg === null) {
-      if (exclusions) {
-        setResults((state) => [...state, ...handleExclusions(arr1, arr2)])
-      } else {
-        setResults((state) => [...state, ...arr2])
-      }
-    } else if (reg.wildcards !== undefined && reg.numeric === undefined) {
-      if (exclusions) {
-        setResults((state) => [...state, ...handleExclusions(arr1, arr2)])
-      } else {
-        setResults((state) => [...state, ...arr2])
-      }
-    } else if (reg.wildcards === undefined && reg.numeric !== undefined) {
-      if (exclusions) {
-        const exclArr = handleExclusions(arr1, arr2)
-        exclArr.forEach((obj) => {
-          const newArr = stringDiff(arr1, obj.word)
-          if (newArr.error) {
-            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-          } else {
-            setResults((state) => [...state, ...newArr.results])
-          }
-        })
-      } else {
-        arr2.forEach((obj) => {
-          const newArr = stringDiff(arr1, obj.word)
-          if (newArr.error) {
-            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-          } else {
-            setResults((state) => [...state, ...newArr.results])
-          }
-        })
-      }
-    } else if (reg.wildcards[0] === '*' && reg.numeric !== undefined) {
-      if (exclusions) {
-        const exclArr = handleExclusions(arr1, arr2)
-        exclArr.forEach((obj) => {
-          const newArr = stringDiff(arr1, obj.word)
-          /*  const newArr = stringDiff(arr1, obj.word)
-          if (newArr.error) {
-            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-          } else {
-            setResults((state) => [...state, ...newArr.results])
-          } */
-        })
-      } else {
-        newStringArr.forEach((obj) => {
-          const newArr = stringDiff(arr1, obj.word)
-          /* const newArr = stringDiff(arr1, obj.word)
-          if (newArr.error) {
-            toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-          } else {
-            setResults((state) => [...state, ...newArr.results])
-          } */
-        })
-      }
+
+    const filterArr = arr.filter((obj) => {
+      return reduceArr.includes(obj.word) ? null : obj.word
+    })
+    if (reg[0][0] !== '?') {
+      filterStrings(userInput, filterArr)
     } else {
-      console.log('who lands here?')
+      setResults((state) => [...state, ...filterArr])
     }
+  }
+
+  const filterStrings = (arr1, arr2) => {
+    return arr2.forEach((obj) => {
+      const newArr = stringDiff(arr1, obj.word)
+
+      if (newArr.error) {
+        toast(`Error: ${newArr.error}; Param: ${obj.word}`)
+      } else if (newArr.results.length > 0) {
+        setResults((state) => [...state, ...newArr.results])
+      } else {
+        return results
+      }
+    })
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     setResults([])
-    const wildcards = userInput.match(/\*|\?/g)
-    const numeric = [...userInput.matchAll(/\d/g)]
+    let wildcards1 = [...userInput.matchAll(/\?/g)]
+    let numeric = userInput.match(/\d/g)
+    let wildcards2 = [...userInput.matchAll(/\d/g)]
     const regx = /\d/g
-    let r = []
-    let newUserInput
-    if (userInput.length > 30) {
+    const numUserInput = userInput.replace(regx, '?')
+    let r
+    if (userInput.length > 10) {
       toast(
         'Word search is limited to 30 characters or less. Please adjust search accordingly.'
       )
     } else if (exclusions.length > 25) {
       toast('Exclusions are limited to 25 characters or less.')
-    } else {
-      if (numeric.length === 0 && wildcards?.length > 0) {
+    } else if (!exclusions) {
+      if (wildcards1.length > 0 || numeric === null) {
         r = await getWords(userInput)
-        filterStrings(userInput, r, { wildcards })
-      } else if (numeric.length > 0 && wildcards?.length === undefined) {
-        newUserInput = userInput.replace(regx, '?')
-        r = await getWords(newUserInput)
-        filterStrings(userInput, r, { numeric })
-      } else if (wildcards?.length > 0 && numeric?.length > 0) {
-        newUserInput = userInput.replace(regx, '?')
-        r = await getWords(newUserInput)
-        filterStrings(newUserInput, r, { wildcards, numeric })
-        return
+        setResults((state) => [...state, ...r])
+      } else if (numeric !== null) {
+        r = await getWords(numUserInput)
+        return filterStrings(userInput, r)
       } else {
+        toast('something weird happened...')
+      }
+    } else {
+      if (wildcards1.length > 0) {
         r = await getWords(userInput)
-        filterStrings(userInput, r, wildcards)
+        return filterExclusions(r, wildcards1)
+      } else {
+        r = await getWords(numUserInput)
+        return filterExclusions(r, wildcards2)
       }
     }
   }
@@ -181,43 +124,24 @@ const SearchForm = () => {
 
   const handleCopy = () => {
     setCopied(true)
-    setMessage(<Message compact>List copied!</Message>)
-    setTimeout(() => {
-      setMessage('')
-    }, 5000)
+    toast('List copied!')
   }
 
   return (
     <Container fluid className="content-container">
       <Segment className="main-content">
-        <h1>Cryptogram or Crossword Word Search</h1>
-
+        <h1>Cryptogram Word Search</h1>
         <List celled>
-          <h2>Wildcards:</h2>
-          <List.Item>
-            <Icon name="question" size="large" />
-            <List.Content>
+          <List.Item style={{ display: 'inline-block' }}>
+            <List.Content verticalAlign="middle">
               <List.Header as="h2">
                 Use one ? for each individual unknown letter.
               </List.Header>
               Example: b?ar might return bear, or boar.
             </List.Content>
           </List.Item>
-
           <List.Item>
-            <Icon name="asterisk" size="large" />
-            <List.Content>
-              <List.Header as="h2">
-                Use * for unknown number of missing letters (zero or more).
-              </List.Header>
-              Example: excel* might return excellent, excellence, and
-              excellently.
-            </List.Content>
-          </List.Item>
-
-          <List.Item>
-            <Icon name="sort numeric ascending" size="large" />
-            <List.Content>
+            <List.Content verticalAlign="middle">
               <List.Header as="h2">
                 Use numeric digits 0 - 9 for two or more of the same letter.
               </List.Header>
@@ -229,19 +153,16 @@ const SearchForm = () => {
           </List.Item>
 
           <List.Item>
-            <Icon name="exclamation circle" size="large" />
-            <List.Content>
-              <List.Header as="h2">Note:</List.Header>
-              You may combine the ? and * wildcards all you want, but if you
-              combine numeric characters with other wildcards, you may get
-              unexpected results, or no results at all.
-              <br />
-              Also, be sure to include at least one alpha (non-numeric)
-              character.
+            <List.Content verticalAlign="middle">
+              <List.Header as="h2">Exclusions:</List.Header>
+              Any letters entered into the 'exclusions' filter will eliminate
+              any results containing the excluded letter(s) in the wildcard "?"
+              position(s). The provided known letters are ignored, i.e., if your
+              query is 'ba?y', and you exclude the letter 'b', the word 'baby'
+              will NOT be included in the returned list.
             </List.Content>
           </List.Item>
         </List>
-
         <br />
         <Form>
           <Form.Field inline>
@@ -275,20 +196,23 @@ const SearchForm = () => {
             Search
           </Button>
           {results.length > 0 ? (
-            <CopyToClipboard
-              className="CopyToClipboard"
-              text={copyResults()}
-              onCopy={handleCopy}
-            >
-              <Button color="teal" size="large">
-                Copy List
+            <>
+              <Button color="teal" size="large" onClick={handleSort}>
+                {buttonText}
               </Button>
-            </CopyToClipboard>
+              <CopyToClipboard
+                className="CopyToClipboard"
+                text={copyResults()}
+                onCopy={handleCopy}
+              >
+                <Button color="teal" size="large">
+                  Copy List
+                </Button>
+              </CopyToClipboard>
+            </>
           ) : (
             <></>
           )}
-          {copied ? <div>{message} </div> : <></>}
-
           <List
             verticalAlign="middle"
             value={results}

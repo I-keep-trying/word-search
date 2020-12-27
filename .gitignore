@@ -24,3 +24,6 @@ audit.txt
 
 /src/stringDiff.old.js
 .eslintcache
+
+.env
+.rest

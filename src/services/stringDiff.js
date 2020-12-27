@@ -1,4 +1,5 @@
 export const stringDiff = (a, b) => {
+ 
   let match = false,
     error = ''
   const results = []

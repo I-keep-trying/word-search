@@ -3,19 +3,24 @@ import { Icon, Segment } from 'semantic-ui-react'
 
 function Footer() {
   return (
-    <Segment
-      textAlign="center"
-      inverted
-      className="ui bottom fixed three item menu"
+    <Segment.Group
+      horizontal
+      className="ui inverted bottom fixed three item menu"
     >
-      <div className="item"></div>
-      <div className="item">
-        <Icon name="meh outline" size="big" />
+      <Segment></Segment>
+      <Segment inverted>
+        <a
+          style={{ color: 'white' }}
+          href="https://github.com/I-keep-trying/word-search"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="github outline" size="big" />
+        </a>
         CopyRight Andrea Crego 2020
-      </div>
-
-      <div className="item"></div>
-    </Segment>
+      </Segment>
+      <Segment></Segment>
+    </Segment.Group>
   )
 }
 

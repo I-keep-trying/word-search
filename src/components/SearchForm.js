@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   Container,
@@ -30,15 +30,12 @@ const SearchForm = () => {
     const sort1tog = () => {
       setToggle(false)
       setButtonText('Sort a - z')
-
       setResults(sort1)
     }
     const sort2 = newResults.sort((a, b) => (a.word < b.word ? -1 : 1))
-
     const sort2tog = () => {
       setToggle(true)
       setButtonText('Sort z - a')
-
       setResults(sort2)
     }
     toggle === false ? sort2tog() : sort1tog()
@@ -69,17 +66,18 @@ const SearchForm = () => {
   }
 
   const filterStrings = (arr1, arr2) => {
-    return arr2.forEach((obj) => {
+    const newResults = arr2.forEach((obj) => {
       const newArr = stringDiff(arr1, obj.word)
 
       if (newArr.error) {
         toast(`Error: ${newArr.error}; Param: ${obj.word}`)
       } else if (newArr.results.length > 0) {
         setResults((state) => [...state, ...newArr.results])
-      } else {
         return results
       }
     })
+
+    return newResults
   }
 
   const handleClick = async (e) => {
@@ -91,13 +89,15 @@ const SearchForm = () => {
     const regx = /\d/g
     const numUserInput = userInput.replace(regx, '?')
     let r
-    if (userInput.length > 10) {
+    if (userInput.length > 30) {
       toast(
         'Word search is limited to 30 characters or less. Please adjust search accordingly.'
       )
     } else if (exclusions.length > 25) {
       toast('Exclusions are limited to 25 characters or less.')
     } else if (!exclusions) {
+      window.localStorage.setItem('searchButtonClicked', 'true')
+
       if (wildcards1.length > 0 || numeric === null) {
         r = await getWords(userInput)
         setResults((state) => [...state, ...r])
@@ -195,7 +195,7 @@ const SearchForm = () => {
           <Button color="teal" size="large" onClick={handleClick}>
             Search
           </Button>
-          {results.length > 0 ? (
+          {results.length > 0 && results[0].word !== 'no matches' ? (
             <>
               <Button color="teal" size="large" onClick={handleSort}>
                 {buttonText}
@@ -218,9 +218,13 @@ const SearchForm = () => {
             value={results}
             onChange={() => setCopied(false)}
           >
-            {results?.map((obj) => (
-              <List.Item key={nanoid()}>{obj.word}</List.Item>
-            ))}
+            {results.length > 0 ? (
+              results.map((obj) => {
+                return <List.Item key={nanoid()}>{obj.word}</List.Item>
+              })
+            ) : (
+              <div>no results</div>
+            )}
           </List>
         </Form>
       </Segment>

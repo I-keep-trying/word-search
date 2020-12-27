@@ -23,7 +23,7 @@ const SearchForm = () => {
   const [copied, setCopied] = useState(false)
   const [toggle, setToggle] = useState(false)
   const [buttonText, setButtonText] = useState('Sort a-z')
-  console.log('toggle?', toggle)
+
   const handleSort = () => {
     const newResults = [...results]
     const sort1 = results.sort((a, b) => (a.word < b.word ? 1 : -1))

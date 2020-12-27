@@ -15,7 +15,7 @@ function Footer() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Icon name="github outline" size="big" />
+          <Icon name="github" size="big" />
         </a>
         CopyRight Andrea Crego 2020
       </Segment>

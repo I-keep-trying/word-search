@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Button,
   Container,
@@ -41,80 +41,25 @@ const SearchForm = () => {
     toggle === false ? sort2tog() : sort1tog()
   }
 
-  const filterExclusions = async (arr, reg) => {
-    const exArr = exclusions.split('').join('|')
-    const regx = new RegExp(`${exArr}`, 'g')
-    const reduceArr = arr.reduce((acc, item) => {
-      for (let i in reg) {
-        let currChar = item.word.charAt(reg[i].index)
-        let matchedItem = [...currChar.matchAll(regx)]
-        if (matchedItem.length > 0) {
-          acc.push(item.word)
-        }
-      }
-      return acc
-    }, [])
-
-    const filterArr = arr.filter((obj) => {
-      return reduceArr.includes(obj.word) ? null : obj.word
-    })
-    if (reg[0][0] !== '?') {
-      filterStrings(userInput, filterArr)
-    } else {
-      setResults((state) => [...state, ...filterArr])
-    }
-  }
-
-  const filterStrings = (arr1, arr2) => {
-    const newResults = arr2.forEach((obj) => {
-      const newArr = stringDiff(arr1, obj.word)
-
-      if (newArr.error) {
-        toast(`Error: ${newArr.error}; Param: ${obj.word}`)
-      } else if (newArr.results.length > 0) {
-        setResults((state) => [...state, ...newArr.results])
-        return results
-      }
-    })
-
-    return newResults
+  const filterResults = (arr1, arr2) => {
+    const newArr = stringDiff(arr1, arr2, exclusions)
+    setResults((state) => [...state, ...newArr])
+    return results
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     setResults([])
-    let wildcards1 = [...userInput.matchAll(/\?/g)]
-    let numeric = userInput.match(/\d/g)
-    let wildcards2 = [...userInput.matchAll(/\d/g)]
-    const regx = /\d/g
-    const numUserInput = userInput.replace(regx, '?')
-    let r
+    const numUserInput = userInput.replace(/\d/g, '?').toLowerCase()
     if (userInput.length > 30) {
       toast(
         'Word search is limited to 30 characters or less. Please adjust search accordingly.'
       )
     } else if (exclusions.length > 25) {
       toast('Exclusions are limited to 25 characters or less.')
-    } else if (!exclusions) {
-      window.localStorage.setItem('searchButtonClicked', 'true')
-
-      if (wildcards1.length > 0 || numeric === null) {
-        r = await getWords(userInput)
-        setResults((state) => [...state, ...r])
-      } else if (numeric !== null) {
-        r = await getWords(numUserInput)
-        return filterStrings(userInput, r)
-      } else {
-        toast('something weird happened...')
-      }
     } else {
-      if (wildcards1.length > 0) {
-        r = await getWords(userInput)
-        return filterExclusions(r, wildcards1)
-      } else {
-        r = await getWords(numUserInput)
-        return filterExclusions(r, wildcards2)
-      }
+      const r = await getWords(numUserInput)
+      return filterResults(userInput.toLowerCase(), r)
     }
   }
 
@@ -135,6 +80,21 @@ const SearchForm = () => {
           <List.Item style={{ display: 'inline-block' }}>
             <List.Content verticalAlign="middle">
               <List.Header as="h2">
+                All queries must contain at least one (1) letter a-z.
+              </List.Header>
+            </List.Content>
+          </List.Item>
+          <List.Item style={{ display: 'inline-block' }}>
+            <List.Content verticalAlign="middle">
+              <List.Header as="h2">
+                Searches are case-insensitive, i.e., capitalized letters are
+                ignored.
+              </List.Header>
+            </List.Content>
+          </List.Item>
+          <List.Item style={{ display: 'inline-block' }}>
+            <List.Content verticalAlign="middle">
+              <List.Header as="h2">
                 Use one ? for each individual unknown letter.
               </List.Header>
               Example: b?ar might return bear, or boar.
@@ -143,7 +103,7 @@ const SearchForm = () => {
           <List.Item>
             <List.Content verticalAlign="middle">
               <List.Header as="h2">
-                Use numeric digits 0 - 9 for two or more of the same letter.
+                Use numeric digits 1 - 9 for two or more of the same letter.
               </List.Header>
               For example, if a word has more than one set of repeating letters,
               you can use different numbers for different sets of letters. For

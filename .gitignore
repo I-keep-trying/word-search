@@ -22,8 +22,8 @@ yarn-debug.log*
 yarn-error.log*
 audit.txt
 
-/src/stringDiff.old.js
 .eslintcache
 
 .env
 .rest
+/words.js

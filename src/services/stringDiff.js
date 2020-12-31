@@ -1,27 +1,20 @@
-export const stringDiff = (a, b) => {
- 
-  let match = false,
-    error = ''
-  const results = []
+export const stringDiff = (a, b, c) => {
+  const reducer1 = [1, 2, 3, 4, 5, 6, 7, 8, 9].reduce(
+    (regXString, placeholder) =>
+      regXString.replace(RegExp(placeholder, ''), `([^${c}])`),
+    String(a)
+  )
 
-  for (const i in b) {
-    const strMatch1 = [...a.matchAll(a[i])]
-    const strMatch2 = [...b.matchAll(b[i])]
-    let n = parseInt(i)
+  const replacer1 = reducer1.replace(/([1-9])/g, '\\$1')
+  const replacer2 = replacer1.replace(/\?/g, `[^${c}]`)
+  const regXWord = RegExp(replacer2, '')
+  const results = b
+    .filter((item) => regXWord.test(item.word))
+    .map((item) => {
+      const word = item.word.match(regXWord)
+      return { word: word[0] }
+    })
 
-    if (strMatch1.length !== strMatch2.length) {
-      match = false
-      n = b.length
-      return { results }
-    } else if (strMatch1.length === strMatch2.length && b.length === n + 1) {
-      match = true
-    }
-    if (match === true) {
-      results.push({ word: b })
-    }
-  }
-
-  return { match, results, error }
+  return results
 }
-
-// originally from https://github.com/Lin-H/comparer - some changes made
+//https://stackoverflow.com/questions/65514498/filter-array-of-strings-based-on-a-pattern-with-placeholders

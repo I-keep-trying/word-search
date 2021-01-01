@@ -6,6 +6,7 @@ import {
   Form,
   List,
   Message,
+  Icon,
 } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
@@ -17,12 +18,13 @@ import './MainContent.css'
 
 const SearchForm = () => {
   const [results, setResults] = useState([])
-  const [userInput, setUserInput] = useState('?1a1?')
+  const [userInput, setUserInput] = useState('')
   const [exclusions, setExclusions] = useState('')
   // eslint-disable-next-line no-unused-vars
   const [copied, setCopied] = useState(false)
   const [toggle, setToggle] = useState(false)
   const [buttonText, setButtonText] = useState('Sort a-z')
+  const [loading, setLoading] = useState(false)
 
   const handleSort = () => {
     const newResults = [...results]
@@ -50,9 +52,6 @@ const SearchForm = () => {
   const handleClick = async (e) => {
     e.preventDefault()
     setResults([])
-    if (exclusions.length > 0 || userInput.length > 0) {
-      handleValidation(userInput, exclusions)
-    }
     const numUserInput = userInput.replace(/\d/g, '?').toLowerCase()
     if (userInput.length > 30) {
       toast(
@@ -60,9 +59,21 @@ const SearchForm = () => {
       )
     } else if (exclusions.length > 25) {
       toast('Exclusions are limited to 25 characters or less.')
+    } else if (userInput.length === 0 && exclusions.length === 0) {
+      toast('Please enter query.')
+    } else if (exclusions.length > 0 && userInput.length === 0) {
+      toast('Please enter query.')
     } else {
+      setLoading(true)
+      handleValidation(userInput, exclusions)
+
       const r = await getWords(numUserInput)
-      return filterResults(userInput.toLowerCase(), r)
+      setLoading(false)
+      if (r[0].word === 'No results') {
+        setResults(r)
+      } else {
+        return filterResults(userInput.toLowerCase(), r)
+      }
     }
   }
 
@@ -77,19 +88,24 @@ const SearchForm = () => {
 
   const handleValidation = (input, excl) => {
     const regx = new RegExp(
-      '%|&|#|@|,|<|>|`|~|_|=|\\^|\\||\\*|\\$|\\-|\\+|\\[|\\]|\\;|\\/|\\.|\\,|\'|\\(|\\)|\\!|\\"',
+      '0|%|&|#|@|,|<|>|`|~|_|=|\\^|\\||\\*|\\$|\\-|\\+|\\[|\\]|\\;|\\/|\\.|\\,|\'|\\(|\\)|\\!|\\"',
       'g'
     )
+
     const valInput = input?.match(regx)
     const valExcl = excl?.match(regx)
     const fixInput = userInput?.replace(valInput, '')
     const fixExclusions = exclusions?.replace(valExcl, '')
-    if (exclusions.length > 0 && userInput.length === 0) {
-      toast('Please enter query.')
-    } else if (userInput.length > 0 || exclusions.length > 0) {
-      setUserInput(fixInput)
-      setExclusions(fixExclusions)
-      toast('Please restrict entries to letters a - z.')
+    if (userInput.length > 0 || exclusions.length > 0) {
+      if (valInput || valExcl) {
+        setUserInput(fixInput)
+        setExclusions(fixExclusions)
+        if (valInput[0] === '0') {
+          toast('Please only use digits 1 - 9 for wildcards.')
+        } else {
+          toast('Please restrict entries to letters a - z.')
+        }
+      }
     }
   }
 
@@ -202,12 +218,13 @@ const SearchForm = () => {
             value={results}
             onChange={() => setCopied(false)}
           >
+            {loading ? <Icon loading name="spinner" /> : <></>}
             {results.length > 0 ? (
               results.map((obj) => {
                 return <List.Item key={nanoid()}>{obj.word}</List.Item>
               })
             ) : (
-              <div>no results</div>
+              <div></div>
             )}
           </List>
         </Form>

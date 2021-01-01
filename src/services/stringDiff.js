@@ -14,7 +14,10 @@ export const stringDiff = (a, b, c) => {
       const word = item.word.match(regXWord)
       return { word: word[0] }
     })
-
+  if (results.length === 0) {
+    console.log('stringDiff results', results)
+    return [{ word: 'Nothing matches the pattern.' }]
+  }
   return results
 }
 //https://stackoverflow.com/questions/65514498/filter-array-of-strings-based-on-a-pattern-with-placeholders

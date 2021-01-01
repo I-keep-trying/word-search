@@ -4,8 +4,8 @@ import {
   Container,
   Segment,
   Form,
-  Input,
   List,
+  Message,
 } from 'semantic-ui-react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
@@ -17,7 +17,7 @@ import './MainContent.css'
 
 const SearchForm = () => {
   const [results, setResults] = useState([])
-  const [userInput, setUserInput] = useState('')
+  const [userInput, setUserInput] = useState('?1a1?')
   const [exclusions, setExclusions] = useState('')
   // eslint-disable-next-line no-unused-vars
   const [copied, setCopied] = useState(false)
@@ -50,6 +50,9 @@ const SearchForm = () => {
   const handleClick = async (e) => {
     e.preventDefault()
     setResults([])
+    if (exclusions.length > 0 || userInput.length > 0) {
+      handleValidation(userInput, exclusions)
+    }
     const numUserInput = userInput.replace(/\d/g, '?').toLowerCase()
     if (userInput.length > 30) {
       toast(
@@ -70,6 +73,24 @@ const SearchForm = () => {
   const handleCopy = () => {
     setCopied(true)
     toast('List copied!')
+  }
+
+  const handleValidation = (input, excl) => {
+    const regx = new RegExp(
+      '%|&|#|@|,|<|>|`|~|_|=|\\^|\\||\\*|\\$|\\-|\\+|\\[|\\]|\\;|\\/|\\.|\\,|\'|\\(|\\)|\\!|\\"',
+      'g'
+    )
+    const valInput = input?.match(regx)
+    const valExcl = excl?.match(regx)
+    const fixInput = userInput?.replace(valInput, '')
+    const fixExclusions = exclusions?.replace(valExcl, '')
+    if (exclusions.length > 0 && userInput.length === 0) {
+      toast('Please enter query.')
+    } else if (userInput.length > 0 || exclusions.length > 0) {
+      setUserInput(fixInput)
+      setExclusions(fixExclusions)
+      toast('Please restrict entries to letters a - z.')
+    }
   }
 
   return (
@@ -126,7 +147,7 @@ const SearchForm = () => {
         <br />
         <Form>
           <Form.Field inline>
-            <Input
+            <Form.Input
               label="Exclude: "
               fluid
               iconPosition="left"
@@ -134,11 +155,13 @@ const SearchForm = () => {
               maxLength="25"
               value={exclusions}
               placeholder="Letters to exclude from search query"
-              onChange={({ target }) => setExclusions(target.value)}
+              onChange={({ target }) =>
+                setExclusions(target.value.toLowerCase())
+              }
             />
           </Form.Field>
           <Form.Field inline>
-            <Input
+            <Form.Input
               fluid
               icon="search"
               iconPosition="left"
@@ -150,6 +173,7 @@ const SearchForm = () => {
                 setUserInput(target.value.toLowerCase())
               }
             />
+            <Message error />
           </Form.Field>
 
           <Button color="teal" size="large" onClick={handleClick}>

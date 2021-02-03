@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="175.38049mm"
+   height="175.38103mm"
+   viewBox="0 0 175.3805 175.38103"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   sodipodi:docname="A-logo-white2.svg">
+  <defs
+     id="defs2">
+    <font
+       horiz-adv-x="1024"
+       id="font5270"
+       inkscape:label="font 1"
+       horiz-origin-x="0"
+       horiz-origin-y="0"
+       vert-origin-x="45"
+       vert-origin-y="90"
+       vert-adv-y="90">
+      <font-face
+         units-per-em="1024"
+         id="font-face5272"
+         font-family="SVGFont 1" />
+      <missing-glyph
+         d="M0,0h1000v1024h-1000z"
+         id="missing-glyph5274" />
+    </font>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497474"
+     inkscape:cx="162.98765"
+     inkscape:cy="436.81868"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer4"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1390"
+     inkscape:window-height="800"
+     inkscape:window-x="459"
+     inkscape:window-y="204"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Layer 4"
+     style="display:inline"
+     transform="translate(2.8345988,2.8347839)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Layer 5"
+     style="display:inline"
+     transform="translate(-25.513622,-25.513361)">
+    <g
+       aria-label="A"
+       transform="translate(28.34822,28.348146)"
+       id="text2756"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:175.784px;line-height:1.25;font-family:monospace;-inkscape-font-specification:'monospace, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:4.39462">
+      <path
+         d="M 106.31366,108.58829 H 63.569309 l -4.291601,10.729 h 4.291601 q 6.351571,0 9.012363,2.48913 2.746625,2.4033 2.746625,6.35157 0,3.86244 -2.746625,6.35157 -2.660792,2.4033 -9.012363,2.4033 h -23.68964 q -6.35157,0 -9.012363,-2.4033 -2.746625,-2.48913 -2.746625,-6.4374 0,-3.94828 2.832457,-6.4374 2.832457,-2.48913 9.355691,-2.31747 L 67.946743,50.480003 H 56.445251 q -6.35157,0 -9.098195,-2.403297 -2.660793,-2.489128 -2.660793,-6.437402 0,-3.948273 2.660793,-6.35157 2.746625,-2.489129 9.098195,-2.489129 l 38.023589,0.08583 35.01947,86.432853 q 6.1799,0 8.15404,1.37331 3.94827,2.83246 3.94827,7.46739 0,3.86244 -2.66079,6.35157 -2.66079,2.4033 -9.01236,2.4033 h -23.68964 q -6.351572,0 -9.098197,-2.4033 -2.660793,-2.48913 -2.660793,-6.4374 0,-3.86244 2.660793,-6.26574 2.746625,-2.48913 9.098197,-2.48913 h 4.2916 z M 99.017938,90.992721 84.855653,56.144917 70.607536,90.992721 Z"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:175.784px;font-family:monospace;-inkscape-font-specification:'monospace, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:4.39462"
+         id="path1423" />
+    </g>
+    <path
+       style="display:inline;opacity:0.97;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 84.855656,-2.8347849 A 87.690467,87.690467 0 0 0 -2.8345978,84.855459 87.690467,87.690467 0 0 0 84.855656,172.54624 87.690467,87.690467 0 0 0 172.5459,84.855459 87.690467,87.690467 0 0 0 84.855656,-2.8347849 Z m 0,18.8613789 A 68.828932,68.828932 0 0 1 153.68452,84.855979 68.828932,68.828932 0 0 1 84.855656,153.68486 68.828932,68.828932 0 0 1 16.026783,84.855979 68.828932,68.828932 0 0 1 84.855656,16.026594 Z"
+       id="path822"
+       inkscape:connector-curvature="0"
+       transform="translate(28.34822,28.348146)" />
+  </g>
+</svg>

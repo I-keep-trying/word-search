@@ -1,26 +1,40 @@
 import React from 'react'
-import { Icon, Segment } from 'semantic-ui-react'
+import {
+  Center,
+  Image,
+  Text,
+  Box,
+  Link,
+  useColorModeValue,
+  usePrefersReducedMotion,
+} from '@chakra-ui/react'
+import GithubLogo from './GithubIcon-lg'
 
-function Footer() {
+const Footer = () => {
   return (
-    <Segment.Group
-      horizontal
-      className="ui inverted bottom fixed three item menu"
-    >
-      <Segment></Segment>
-      <Segment inverted>
-        <a
-          style={{ color: 'white' }}
-          href="https://github.com/I-keep-trying/word-search"
+    <Box bg={useColorModeValue('white', 'gray.800')} id="footer-wrap">
+      <Center h="80px">
+        <Box>
+          <GithubLogo />
+        </Box>
+        {/*  <Link
+          href="https://reactjs.org/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Icon name="github" size="big" />
-        </a>
-        CopyRight Andrea Crego 2020
-      </Segment>
-      <Segment></Segment>
-    </Segment.Group>
+          <Box maxW="40px">
+            <Github />
+          </Box>
+        </Link> */}
+        <Link
+          href="https://chakra-ui.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Box maxW="40px"></Box>
+        </Link>
+      </Center>
+    </Box>
   )
 }
 

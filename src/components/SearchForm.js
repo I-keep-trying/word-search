@@ -29,21 +29,20 @@ import {
   IconButton,
   Text,
   Tooltip,
-  useColorModeValue,
   useColorMode,
+  useColorModeValue,
   Spacer,
-  useClipboard,
+  Link,
+  Image,
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
-//import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
 import { stringDiff } from '../services/stringDiff'
 import { getWords } from '../services/dictionary'
-import { Sun, Moon } from '../components/logos'
+import { SpinnerLogo, Moon, Sun, Logo } from '../components/logos'
 
-import GithubLogo from './GithubIcon-lg'
-
-const ThemeToggle = () => {
+export const ThemeToggle = () => {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <>
@@ -66,57 +65,19 @@ const ThemeToggle = () => {
   )
 }
 
-const Header = () => {
-  return (
-    <>
-      <Flex
-        id="header-wrap"
-        bg={useColorModeValue('white', 'gray.800')}
-        align="center"
-        justify="flex-end"
-        wrap="wrap"
-        w="100%"
-        h="10%"
-      >
-        <Tooltip
-          placement="auto"
-          label="link to github repo"
-          aria-label="link to github repo"
-        >
-          <Box mt={3} ml={2} w="5%">
-            <GithubLogo />
-          </Box>
-        </Tooltip>
-        <Spacer />
-        <Tooltip
-          label="toggle light/dark mode"
-          aria-label="toggle light/dark mode"
-        >
-          <Box mt={3} mr={2} w="5%">
-            <ThemeToggle />
-          </Box>
-        </Tooltip>
-      </Flex>
-    </>
-  )
-}
-
 const SearchForm = () => {
   const [results, setResults] = useState([])
   const [userInput, setUserInput] = useState('')
   const [exclusions, setExclusions] = useState('')
+  // eslint-disable-next-line no-unused-vars
+  const [copied, setCopied] = useState(false)
   const [toggle, setToggle] = useState(false)
   const [buttonText, setButtonText] = useState('Sort a-z')
+  const [copiedButton, setCopiedButton] = useState('Copy List')
   const [notify, setNotify] = useState({ title: '', msg: '' })
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false)
 
-  const { hasCopied, onCopy } = useClipboard(
-    results.map((result) => {
-      return result.word
-    })
-  )
-  console.log('onCopy', onCopy)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const isEdge = /Edge/.test(navigator.userAgent)
@@ -137,7 +98,6 @@ const SearchForm = () => {
   const filterResults = (arr1, arr2) => {
     const newArr = stringDiff(arr1, arr2, exclusions)
     setResults((state) => [...state, ...newArr])
-    console.log('results', newArr)
     return results
   }
 
@@ -157,7 +117,7 @@ const SearchForm = () => {
     } else if (userInput.length > 30) {
       onOpen()
       setNotify({
-        title: 'One word at a time please',
+        title: 'Whoa hang on a minute',
         msg:
           'Word search is limited to 30 characters or less. Please adjust search accordingly.',
       })
@@ -167,7 +127,7 @@ const SearchForm = () => {
     } else if (exclusions.length > 25) {
       onOpen()
       setNotify({
-        title: 'Get a grip',
+        title: 'Dont be crazy',
         msg: 'Exclusions are limited to 25 characters or less.',
       })
       setTimeout(() => {
@@ -176,7 +136,7 @@ const SearchForm = () => {
     } else if (exclusions.length >= 0 && userInput.length === 0) {
       onOpen()
       setNotify({
-        title: 'Huh?',
+        title: 'Missing information',
         msg: 'Please enter something in the search field.',
       })
       setTimeout(() => {
@@ -219,17 +179,17 @@ const SearchForm = () => {
     }
   }
 
-  /*   const copyResults = () => {
+  const copyResults = () => {
     return results?.map((obj) => obj.word)
-  } */
+  }
 
-  /*   const handleCopy = () => {
+  const handleCopy = () => {
     setCopied(true)
     setCopiedButton('List copied!')
     setTimeout(() => {
       setCopiedButton('Copy List')
     }, 3000)
-  } */
+  }
 
   const resetInputField = () => {
     setUserInput('')
@@ -263,17 +223,46 @@ const SearchForm = () => {
     setResults([])
     setUserInput('')
     setExclusions('')
-    //  setCopied(false)
+    setCopied(false)
   }
 
   return (
     <>
-      <Header />
+      <Flex
+        id="header-wrap"
+        bg={useColorModeValue('white', 'gray.800')}
+        align="center"
+        justify="flex-end"
+        wrap="wrap"
+        w="100%"
+        h="10%"
+      >
+        <Box w="5%">
+          <Link href="https://protected-caverns-46759.herokuapp.com" isExternal>
+            <IconButton
+              aria-label="logo"
+              variant="link"
+              size="lg"
+              icon={<Logo />}
+            />
+          </Link>
+        </Box>
+        <Spacer />
+        <Box ml={0} mr={5} w="5%">
+          <ThemeToggle />
+        </Box>
+      </Flex>
+      {/* The heading 'Word Search' disappears unless it's in both places, here... */}
       <Center h="100px">
         <Heading variant="with-gradient">Word Search</Heading>
       </Center>
+      {loading ? <SpinnerLogo h="20vmin" pointerEvents="none" /> : <></>}
       <Flex width="Full" align="center" justifyContent="center">
         <Box textAlign="left" w="90%" maxWidth="500px">
+          {/* ...AND here!!! It's a god damn mystery. */}
+          <Center h="100px">
+            <Heading variant="with-gradient">Word Search</Heading>
+          </Center>
           <Accordion allowMultiple>
             <Tooltip label="Expand for details" aria-label="Expand for details">
               <AccordionItem>
@@ -404,14 +393,9 @@ const SearchForm = () => {
             </Box>
             <Container textAlign="left">
               <ButtonGroup spacing={[1, 4, 6]}>
-                <Tooltip
-                  label="Click 'search' or press the enter key to send your query."
-                  aria-label="Click 'search' or press the enter key to send your query."
-                >
-                  <Button onClick={handleSubmit} size="sm" type="submit">
-                    Search
-                  </Button>
-                </Tooltip>
+                <Button onClick={handleSubmit} size="sm" type="submit">
+                  Search
+                </Button>
                 <Modal isOpen={isOpen} onClose={onClose} isCentered>
                   <ModalOverlay />
                   <ModalContent>
@@ -423,37 +407,30 @@ const SearchForm = () => {
 
                 {results.length > 0 ? (
                   <>
-                    <Tooltip
-                      label="Sort query results alphabetically from a to z. Click again to reverse the sort order."
-                      aria-label="Sort query results alphabetically from a to z. Click again to reverse the sort order."
+                    <Button size="sm" onClick={handleSort}>
+                      {buttonText}
+                    </Button>
+                    <CopyToClipboard
+                      className="CopyToClipboard"
+                      text={copyResults()}
+                      onCopy={handleCopy}
                     >
-                      <Button size="sm" onClick={handleSort}>
-                        {buttonText}
-                      </Button>
-                    </Tooltip>
-                    <Tooltip
-                      label="Copy search results to your computer's clipboard."
-                      aria-label="Copy search results to your computer's clipboard."
-                    >
-                      <Button size="sm" onClick={onCopy} ml={2}>
-                        {hasCopied ? 'Copied!' : 'Copy'}
-                      </Button>
-                    </Tooltip>
-                    <Tooltip
-                      label="Erase everything and start a new query."
-                      aria-label="Erase everything and start a new query."
-                    >
-                      <Button size="sm" onClick={resetForm}>
-                        Reset
-                      </Button>
-                    </Tooltip>
+                      <Button size="sm">{copiedButton} </Button>
+                    </CopyToClipboard>
+                    <Button size="sm" onClick={resetForm}>
+                      Reset
+                    </Button>
                   </>
                 ) : (
                   <></>
                 )}
               </ButtonGroup>
 
-              <List verticalAlign="middle" value={results}>
+              <List
+                verticalAlign="middle"
+                value={results}
+                onChange={() => setCopied(false)}
+              >
                 {results?.map((obj) => (
                   <ListItem key={nanoid()}>{obj.word}</ListItem>
                 ))}

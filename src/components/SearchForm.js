@@ -32,9 +32,10 @@ import {
   useColorModeValue,
   useColorMode,
   Spacer,
+  useClipboard,
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
+//import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
 import { stringDiff } from '../services/stringDiff'
 import { getWords } from '../services/dictionary'
@@ -104,15 +105,18 @@ const SearchForm = () => {
   const [results, setResults] = useState([])
   const [userInput, setUserInput] = useState('')
   const [exclusions, setExclusions] = useState('')
-  // eslint-disable-next-line no-unused-vars
-  const [copied, setCopied] = useState(false)
   const [toggle, setToggle] = useState(false)
   const [buttonText, setButtonText] = useState('Sort a-z')
-  const [copiedButton, setCopiedButton] = useState('Copy List')
   const [notify, setNotify] = useState({ title: '', msg: '' })
   // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false)
 
+  const { hasCopied, onCopy } = useClipboard(
+    results.map((result) => {
+      return result.word
+    })
+  )
+  console.log('onCopy', onCopy)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const isEdge = /Edge/.test(navigator.userAgent)
@@ -153,7 +157,7 @@ const SearchForm = () => {
     } else if (userInput.length > 30) {
       onOpen()
       setNotify({
-        title: 'Whoa hang on a minute',
+        title: 'One word at a time please',
         msg:
           'Word search is limited to 30 characters or less. Please adjust search accordingly.',
       })
@@ -163,7 +167,7 @@ const SearchForm = () => {
     } else if (exclusions.length > 25) {
       onOpen()
       setNotify({
-        title: 'Dont be crazy',
+        title: 'Get a grip',
         msg: 'Exclusions are limited to 25 characters or less.',
       })
       setTimeout(() => {
@@ -172,7 +176,7 @@ const SearchForm = () => {
     } else if (exclusions.length >= 0 && userInput.length === 0) {
       onOpen()
       setNotify({
-        title: 'Missing information',
+        title: 'Huh?',
         msg: 'Please enter something in the search field.',
       })
       setTimeout(() => {
@@ -215,17 +219,17 @@ const SearchForm = () => {
     }
   }
 
-  const copyResults = () => {
+  /*   const copyResults = () => {
     return results?.map((obj) => obj.word)
-  }
+  } */
 
-  const handleCopy = () => {
+  /*   const handleCopy = () => {
     setCopied(true)
     setCopiedButton('List copied!')
     setTimeout(() => {
       setCopiedButton('Copy List')
     }, 3000)
-  }
+  } */
 
   const resetInputField = () => {
     setUserInput('')
@@ -259,12 +263,12 @@ const SearchForm = () => {
     setResults([])
     setUserInput('')
     setExclusions('')
-    setCopied(false)
+    //  setCopied(false)
   }
 
   return (
     <>
-    <Header />
+      <Header />
       <Center h="100px">
         <Heading variant="with-gradient">Word Search</Heading>
       </Center>
@@ -427,20 +431,14 @@ const SearchForm = () => {
                         {buttonText}
                       </Button>
                     </Tooltip>
-
-                    <CopyToClipboard
-                      className="CopyToClipboard"
-                      text={copyResults()}
-                      onCopy={handleCopy}
+                    <Tooltip
+                      label="Copy search results to your computer's clipboard."
+                      aria-label="Copy search results to your computer's clipboard."
                     >
-                      <Tooltip
-                        label="Copy search results to your computer's clipboard."
-                        aria-label="Copy search results to your computer's clipboard."
-                      >
-                        <Button size="sm">{copiedButton} </Button>
-                      </Tooltip>
-                    </CopyToClipboard>
-
+                      <Button size="sm" onClick={onCopy} ml={2}>
+                        {hasCopied ? 'Copied!' : 'Copy'}
+                      </Button>
+                    </Tooltip>
                     <Tooltip
                       label="Erase everything and start a new query."
                       aria-label="Erase everything and start a new query."
@@ -455,11 +453,7 @@ const SearchForm = () => {
                 )}
               </ButtonGroup>
 
-              <List
-                verticalAlign="middle"
-                value={results}
-                onChange={() => setCopied(false)}
-              >
+              <List verticalAlign="middle" value={results}>
                 {results?.map((obj) => (
                   <ListItem key={nanoid()}>{obj.word}</ListItem>
                 ))}

@@ -6,6 +6,7 @@ import { Fonts } from './Fonts/Fonts'
 
 import App from './App'
 
+
 ReactDOM.render(
   <ChakraProvider theme={extendTheme}>
     <Fonts />

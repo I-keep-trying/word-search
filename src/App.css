@@ -1,19 +1,7 @@
-.fade-enter {
-  opacity: 0;
-  z-index: 1;
-}
-
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  transition: opacity 250ms ease-in;
-}
-
-#footer-wrap {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  padding-bottom: 0.2em;
-}
+/* .container {
+  position: relative;
+  margin-bottom: 10em;
+} */
 
 .page {
   position: absolute;
@@ -111,6 +99,82 @@
   -webkit-text-fill-color: transparent;
   text-decoration: none;
   font-weight: bold;
+}
+
+.page-wrap {
+  top: 0;
+  margin-top: 80px;
+}
+/* https://testing.2x2p.com/header/ */
+/* 
+<div class="css-1mv885y" id="header-wrap" style="top: -8em; transition: top 666ms ease 0s;">
+<a class="chakra-link css-czp796" align="center" href="/">
+<div class="css-1wlwiam"><svg viewBox="-15 -15 200 200" focusable="false" class="chakra-icon css-1lgokyc">
+<linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" stop-color="currentColor"></stop>
+<stop offset="100%" stop-color="currentColor"></stop></linearGradient>
+<linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="5%" stop-color="#ff0080"></stop>
+<stop offset="95%" stop-color="rgb(255, 94, 0)"></stop></linearGradient>
+<g class="gradient1"><path id="shape" d="M87.69 0A87.69 87.69 0 000 87.69a87.69 87.69 0 0087.69 87.69 87.69 87.69 0 0087.689-87.69A87.69 87.69 0 0087.689 0zm-.105 18.861a68.828 68.828 0 01.104 0 68.828 68.828 0 0168.828 68.828 68.828 68.828 0 01-12.73 39.88c-.633-1.564-1.734-2.913-3.312-4.045-1.316-.916-4.034-1.373-8.154-1.373L97.3 35.718l-38.023-.086c-4.234 0-7.267.83-9.098 2.489-1.774 1.602-2.661 3.72-2.661 6.352s.887 4.777 2.66 6.437c1.832 1.602 4.865 2.403 9.1 2.403h11.5l-27.638 68.835c-4.348-.114-7.467.658-9.356 2.318-1.007.885-1.744 1.911-2.214 3.074A68.828 68.828 0 0118.86 87.687a68.828 68.828 0 0168.725-68.828zm.104 40.119l14.162 34.847h-28.41L87.689 58.98zm-21.286 52.442h42.743l4.205 10.729h-4.29c-4.235 0-7.268.83-9.099 2.489-1.774 1.602-2.66 3.69-2.66 6.265 0 2.633.886 4.779 2.66 6.438 1.831 1.602 4.864 2.403 9.098 2.403h23.655a68.828 68.828 0 01-45.026 16.772 68.828 68.828 0 01-45.029-16.772h23.742c4.234 0 7.238-.8 9.011-2.403 1.832-1.66 2.747-3.777 2.747-6.352 0-2.632-.915-4.75-2.747-6.351-1.773-1.66-4.778-2.489-9.012-2.489h-4.29l4.29-10.729z"></path><use xlink:href="#shape" class="gradient2"></use></g></svg></div></a><div class="css-17xejub"></div><button type="button" class="chakra-button chakra-button css-l5jkhz" aria-label=""><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-onkibi" aria-hidden="true"><path fill="currentColor" d="M 3 5 A 1.0001 1.0001 0 1 0 3 7 L 21 7 A 1.0001 1.0001 0 1 0 21 5 L 3 5 z M 3 11 A 1.0001 1.0001 0 1 0 3 13 L 21 13 A 1.0001 1.0001 0 1 0 21 11 L 3 11 z M 3 17 A 1.0001 1.0001 0 1 0 3 19 L 21 19 A 1.0001 1.0001 0 1 0 21 17 L 3 17 z"></path></svg></button><div class="chakra-stack css-hsw8ib"><a class="chakra-link css-1hgfene" href="#/">Homepage</a><a aria-current="page" class="chakra-link css-1hgfene active" href="#/bio">Bio</a><a class="chakra-link css-1hgfene" href="#/resume">Resume</a><a class="chakra-link css-1hgfene" href="#/wordsearch">WordSearch</a><a class="chakra-link css-1hgfene" href="#/contact">Contact</a></div><div class="css-1dwbrks"><button type="button" class="chakra-button css-epbste" aria-label="light mode"><svg viewBox="0 0 24 24" focusable="false" class="chakra-icon css-1pz9bhs" aria-hidden="true"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2"></path><path d="M12 21v2"></path><path d="M4.22 4.22l1.42 1.42"></path><path d="M18.36 18.36l1.42 1.42"></path><path d="M1 12h2"></path><path d="M21 12h2"></path><path d="M4.22 19.78l1.42-1.42"></path><path d="M18.36 5.64l1.42-1.42"></path></g></svg></button></div><div class="break"></div><div class="css-bj4wq7"><div class="chakra-skeleton css-574g5t">
+</div></div></div>
+
+
+
+
+#page-wrap {
+  top: 0;
+}
+#header-wrap {
+  z-index: 1;
+  position: fixed;
+  transition: top 666ms;
+}
+
+#header-item:hover {
+  background: -webkit-linear-gradient(45deg, #ff0080, rgb(255, 94, 0));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#item:hover {
+  color: linear-gradient(45deg, #ff0080, rgb(255, 94, 0));
+  background-clip: text;
+
+} */
+/* 
+<Box zIndex="1" position="fixed" transition="top 666ms">
+
+<Box
+  color="white"
+  _hover={{ bgGradient: "linear(to-l, #7928CA,#FF0080)", bgClip:"text" }}
+>
+
+<Box sx={{ filter: "blur(20px)" }}></Box> instead of
+<Box filter="blur(20px)"></Box>
+
+#header-content {
+  margin: 0;
+  min-height: 75px;
+  box-sizing: border-box;
+} */
+/* #header-progress {
+  padding: 0px;
+  box-sizing: border-box;
+  height: 5px;
+  width: 0%;
+  overflow: hidden;
+  transition: width 333ms linear;
+} */
+.page-content {
+  margin-top: 80px;
+  padding: 5px;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: scroll;
 }
 
 #footer-wrap {

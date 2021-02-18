@@ -29,41 +29,13 @@ import {
   IconButton,
   Text,
   Tooltip,
-  useColorMode,
-  useColorModeValue,
-  Spacer,
-  Link,
-  Image,
 } from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { nanoid } from 'nanoid'
 import { stringDiff } from '../services/stringDiff'
 import { getWords } from '../services/dictionary'
-import { SpinnerLogo, Moon, Sun, Logo } from '../components/logos'
-
-export const ThemeToggle = () => {
-  const { colorMode, toggleColorMode } = useColorMode()
-  return (
-    <>
-      {colorMode === 'light' ? (
-        <IconButton
-          aria-label="dark mode"
-          icon={<Moon />}
-          onClick={toggleColorMode}
-          variant="link"
-        />
-      ) : (
-        <IconButton
-          aria-label="light mode"
-          icon={<Sun />}
-          onClick={toggleColorMode}
-          variant="link"
-        />
-      )}
-    </>
-  )
-}
+import { SpinnerLogo } from '../components/Logo'
 
 const SearchForm = () => {
   const [results, setResults] = useState([])
@@ -227,44 +199,18 @@ const SearchForm = () => {
   }
 
   return (
-    <>
-      <Flex
-        id="header-wrap"
-        bg={useColorModeValue('white', 'gray.800')}
-        align="center"
-        justify="flex-end"
-        wrap="wrap"
-        w="100%"
-        h="10%"
-      >
-        <Box w="5%">
-          <Link href="https://protected-caverns-46759.herokuapp.com" isExternal>
-            <IconButton
-              aria-label="logo"
-              variant="link"
-              size="lg"
-              icon={<Logo />}
-            />
-          </Link>
-        </Box>
-        <Spacer />
-        <Box ml={0} mr={5} w="5%">
-          <ThemeToggle />
-        </Box>
-      </Flex>
-      {/* The heading 'Word Search' disappears unless it's in both places, here... */}
+    <div className="page-wrap">
       <Center h="100px">
-        <Heading variant="with-gradient">Word Search</Heading>
+        <Heading variant="with-gradient">Cryptogram Word Search</Heading>
       </Center>
       {loading ? <SpinnerLogo h="20vmin" pointerEvents="none" /> : <></>}
       <Flex width="Full" align="center" justifyContent="center">
         <Box textAlign="left" w="90%" maxWidth="500px">
-          {/* ...AND here!!! It's a god damn mystery. */}
-          <Center h="100px">
-            <Heading variant="with-gradient">Word Search</Heading>
-          </Center>
           <Accordion allowMultiple>
-            <Tooltip label="Expand for details" aria-label="Expand for details">
+            <Tooltip
+              label="Example: b?ar might return bear, or boar."
+              aria-label="Example: b?ar might return bear, or boar."
+            >
               <AccordionItem>
                 <AccordionButton>
                   <AccordionIcon />
@@ -278,36 +224,61 @@ const SearchForm = () => {
               </AccordionItem>
             </Tooltip>
 
-            <AccordionItem>
-              <AccordionButton>
-                <AccordionIcon />
-                <Box flex="1" textAlign="left">
-                  Use numeric digits 1 - 9 for two or more of the same letter.
-                </Box>
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                For example, if a word has more than one set of repeating
+            <Tooltip
+              label=" For example, if a word has more than one set of repeating
                 letters, you can use different numbers for different sets of
                 letters. For example, 'balloon' could be 'ba1122n', or
-                'excellence' could be: 1xc1221nc1.
-              </AccordionPanel>
-            </AccordionItem>
+                'excellence' could be: 1xc1221nc1."
+              aria-label=" For example, if a word has more than one set of repeating
+                letters, you can use different numbers for different sets of
+                letters. For example, 'balloon' could be 'ba1122n', or
+                'excellence' could be: 1xc1221nc1."
+            >
+              <AccordionItem>
+                <AccordionButton>
+                  <AccordionIcon />
+                  <Box flex="1" textAlign="left">
+                    Use numeric digits 1 - 9 for two or more of the same letter.
+                  </Box>
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                  For example, if a word has more than one set of repeating
+                  letters, you can use different numbers for different sets of
+                  letters. For example, 'balloon' could be 'ba1122n', or
+                  'excellence' could be: 1xc1221nc1.
+                </AccordionPanel>
+              </AccordionItem>
+            </Tooltip>
 
-            <AccordionItem>
-              <AccordionButton>
-                <AccordionIcon />
-                <Box flex="1" textAlign="left">
-                  (Optional) Exclude or filter specific letters from results.
-                </Box>
-              </AccordionButton>
-              <AccordionPanel pb={4}>
-                Any letters entered into the 'exclusions' filter will eliminate
+            <Tooltip
+              label='Any letters entered into the "exclusions" filter will eliminate
                 any results containing the excluded letter(s) in the wildcard
                 "?" position(s). The provided known letters are ignored, i.e.,
-                if your query is 'ba?y', and you exclude the letter 'b', the
-                word 'baby' will NOT be included in the returned list.
-              </AccordionPanel>
-            </AccordionItem>
+                if your query is "ba?y", and you exclude the letter "b", the
+                word "baby" will NOT be included in the returned list.'
+              aria-label='Any letters entered into the "exclusions" filter will eliminate
+                any results containing the excluded letter(s) in the wildcard
+                "?" position(s). The provided known letters are ignored, i.e.,
+                if your query is "ba?y", and you exclude the letter "b", the
+                word "baby" will NOT be included in the returned list.'
+            >
+              <AccordionItem>
+                <AccordionButton>
+                  <AccordionIcon />
+                  <Box flex="1" textAlign="left">
+                    (Optional) Exclude or filter specific letters from results.
+                  </Box>
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                  Any letters entered into the 'exclusions' filter will
+                  eliminate any results containing the excluded letter(s) in the
+                  wildcard "?" position(s). The provided known letters are
+                  ignored, i.e., if your query is 'ba?y', and you exclude the
+                  letter 'b', the word 'baby' will NOT be included in the
+                  returned list.
+                </AccordionPanel>
+              </AccordionItem>
+            </Tooltip>
           </Accordion>
 
           <form onSubmit={handleSubmit}>
@@ -439,7 +410,7 @@ const SearchForm = () => {
           </form>
         </Box>
       </Flex>
-    </>
+    </div>
   )
 }
 

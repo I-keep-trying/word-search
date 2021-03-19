@@ -7,34 +7,25 @@ import {
   Link,
   useColorModeValue,
   usePrefersReducedMotion,
+  HStack,
+  Flex,
 } from '@chakra-ui/react'
 import GithubLogo from './GithubIcon-lg'
 
 const Footer = () => {
   return (
-    <Box bg={useColorModeValue('white', 'gray.800')} id="footer-wrap">
-      <Center h="80px">
-        <Box>
-          <GithubLogo />
-        </Box>
-        {/*  <Link
-          href="https://reactjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Box maxW="40px">
-            <Github />
+    <>
+      <Flex w="100%" mb="8px" className="footer-wrap">
+        <Center w="100%">
+          <Box w="20">
+            <GithubLogo />
           </Box>
-        </Link> */}
-        <Link
-          href="https://chakra-ui.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Box maxW="40px"></Box>
-        </Link>
-      </Center>
-    </Box>
+          <Text  fontSize="md">
+            Made by Andrea Crego 2021
+          </Text>
+        </Center>
+      </Flex>
+    </>
   )
 }
 

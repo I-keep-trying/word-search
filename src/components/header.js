@@ -7,8 +7,6 @@ import {
   Spacer,
   useColorModeValue,
   Skeleton,
-  Center,
-  Heading,
 } from '@chakra-ui/react'
 import { Logo, Sun, Moon } from '../components/Logo'
 
@@ -67,7 +65,7 @@ export const Header = () => {
         id="header-wrap"
         bg={useColorModeValue('white', 'gray.800')}
         align="center"
-        justify="flex-end"
+        //  justify="flex-end"
         wrap="wrap"
         w="100%"
         h="10%"

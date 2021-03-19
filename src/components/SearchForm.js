@@ -47,7 +47,6 @@ const SearchForm = () => {
   const [buttonText, setButtonText] = useState('Sort a-z')
   const [copiedButton, setCopiedButton] = useState('Copy List')
   const [notify, setNotify] = useState({ title: '', msg: '' })
-  // eslint-disable-next-line no-unused-vars
   const [loading, setLoading] = useState(false)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -199,13 +198,12 @@ const SearchForm = () => {
   }
 
   return (
-    <div className="page-wrap">
-      <Center h="100px">
-        <Heading variant="with-gradient">Cryptogram Word Search</Heading>
+    <Container mt={20} >
+      <Center>
+        <Heading  h="20" variant="with-gradient">Cryptogram Word Search</Heading>
       </Center>
       {loading ? <SpinnerLogo h="20vmin" pointerEvents="none" /> : <></>}
-      <Flex width="Full" align="center" justifyContent="center">
-        <Box textAlign="left" w="90%" maxWidth="500px">
+        <Box textAlign="left" w="100%" >
           <Accordion allowMultiple>
             <Tooltip
               label="Example: b?ar might return bear, or boar."
@@ -409,8 +407,7 @@ const SearchForm = () => {
             </Container>
           </form>
         </Box>
-      </Flex>
-    </div>
+   </Container>
   )
 }
 

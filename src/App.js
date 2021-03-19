@@ -2,6 +2,7 @@ import React from 'react'
 import { Grid } from '@chakra-ui/react'
 import SearchForm from './components/SearchForm'
 import Header from './components/header'
+import Footer from './components/footer'
 import './App.css'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
       <Grid direction="column" align="center">
         <Header />
         <SearchForm />
+        <Footer />
       </Grid>
     </>
   )

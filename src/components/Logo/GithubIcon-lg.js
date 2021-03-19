@@ -10,9 +10,8 @@ const GithubIcon = () => {
       href={'https://github.com/I-keep-trying'}
     >
       <Icon
-        width="15%"
         height="auto"
-        viewBox="0 0 20 20" 
+        viewBox="0 0 20 20"
       >
         <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="currentColor" />
@@ -35,5 +34,3 @@ const GithubIcon = () => {
 }
 
 export default GithubIcon
-
-

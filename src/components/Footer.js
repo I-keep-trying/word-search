@@ -1,13 +1,8 @@
 import React from 'react'
 import {
   Center,
-  Image,
   Text,
   Box,
-  Link,
-  useColorModeValue,
-  usePrefersReducedMotion,
-  HStack,
   Flex,
 } from '@chakra-ui/react'
 import GithubLogo from './GithubIcon-lg'

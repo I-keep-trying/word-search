@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "repository": "https://github.com/I-keep-trying/word-search",
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@chakra-ui/core": "^0.8.0",
     "@chakra-ui/icons": "^1.0.4",

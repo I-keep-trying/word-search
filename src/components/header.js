@@ -71,13 +71,13 @@ export const Header = () => {
         h="10%"
       >
         <Box w="5%">
-          <IconButton
+{/*           <IconButton
             aria-label="logo"
             variant="link"
             size="lg"
             icon={<Logo />}
           />
-        </Box>
+ */}        </Box>
         <Spacer />
         <Box ml={0} mr={5} w="5%">
           <ThemeToggle />
